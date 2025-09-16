@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agenda Reunión Operativa</title>
+    {% load static %}
+    <!-- En lugar de CDN externo, usa tu archivo local -->
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/operativo.css' %}" />
+    <!-- Incluye Font Awesome localmente o usa una versión alojada -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>AGENDA DE LA REUNIÓN OPERATIVA DE LA CENTRAL CCC VALLADOLID</h1>
+      <section class="info-reunion">
+        <label>Identificador:</label> <span>REUNIÓN OPERATIVA</span>
+        <label>Fecha:</label>
+        <span id="fecha">{{ fecha_actual|date:"d/m/Y" }}</span>
+        <label>Lugar:</label> <span>Sala de Juntas</span>
+        <label>Duración:</label>
+        <div class="cronometro">
+          <span id="timer">15:00</span>
+          <button id="startTimer">Comenzar</button>
+          <button id="pauseTimer" style="display: none">Pausar</button>
+          <button id="resetTimer">Reiniciar</button>
+        </div>
+      </section>
+      <section class="proposito">
+        <h2 class="section-header">PROPÓSITO</h2>
+        <p>
+          INFORMAR EL ESTADO DE LAS UNIDADES, PROPORCIONAR LA PROBLEMÁTICA
+          PRIORITARIA DE LAS ÁREAS OPERATIVAS E INFORMAR EL AVANCE DE LOS
+          PROGRAMAS DE MANTENIMIENTO.
+        </p>
+      </section>
+      <section class="importancia">
+        <h2 class="section-header">IMPORTANCIA</h2>
+        <p>
+          QUE EL PERSONAL ORIENTE SUS ACTIVIDADES A LA SOLUCIÓN DE LAS
+          NECESIDADES PRIORITARIAS PARA MANTENER LAS UNIDADES OPERANDO EN FORMA
+          CONFIABLE Y SEGURA, ADEMÁS DE INFORMAR EL AVANCE DE LOS PROYECTOS DE
+          MANTENIMIENTO.
+        </p>
+      </section>
+      <section class="integrantes">
+        <h2 class="section-header">INTEGRANTES</h2>
+        <div class="integrantes-controls">
+          <select id="integrantesSelect">
+            <option value="SUPERINTENDENTE GENERAL">
+              SUPERINTENDENTE GENERAL
+            </option>
+            <option value="SUPERINTENDENTE DE PRODUCCIÓN">
+              SUPERINTENDENTE DE PRODUCCIÓN
+            </option>
+            <option value="SUPERINTENDENTE DE MANTENIMIENTO">
+              SUPERINTENDENTE DE MANTENIMIENTO
+            </option>
+            <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+            <option value="JEFES DE DEPARTAMENTOS">
+              JEFES DE DEPARTAMENTOS
+            </option>
+            <option value="SUPERINTENDENTE DE TURNO">
+              SUPERINTENDENTE DE TURNO
+            </option>
+            <option value="JEFES OFICINA">JEFES DE OFICINA</option>
+            <option value="SUPERVISORES">SUPERVISORES</option>
+          </select>
+          <button id="addIntegrante">Agregar</button>
+        </div>
+        <ul id="listaIntegrantes"></ul>
+      </section>
+      <section class="agenda">
+        <h2 class="section-header">AGENDA DETALLADA</h2>
+        <div class="cronometro-secciones">
+          <span id="currentSection">Sección actual: -</span>
+          <span id="sectionTimer">00:00</span>
+          <button id="nextSection" style="display: none">
+            Siguiente sección
+          </button>
+        </div>
+        <ol id="agendaList">
+          <li data-time="6">
+            PRODUCCIÓN (6 MIN)
+            <button class="add-note-btn" data-section="produccion">
+              <i class="fas fa-plus"></i> Agregar nota
+            </button>
+            <div class="notes-container" id="produccion-notes"></div>
+            <ul>
+              <li>ESTADO DE LAS UNIDADES</li>
+              <li>SEGUIMIENTO A REGIMEN TERMICO DE LAS UNIDADES</li>
+              <li>Avisos de atención inmediata del área de operación</li>
+              <li>Avisos de atención inmediata del área química</li>
+              <li>Maniobras con riesgo para la operación de las unidades</li>
+            </ul>
+          </li>
+          <li data-time="2">
+            MANTENIMIENTO (2 MIN)
+            <button class="add-note-btn" data-section="mantenimiento">
+              <i class="fas fa-plus"></i> Agregar nota
+            </button>
+            <div class="notes-container" id="mantenimiento-notes"></div>
+            <ul>
+              <li>
+                Seguimiento de actividades que originaron salida o decremento de
+                la unidad
+              </li>
+              <li>
+                Avance del proyecto de mantenimiento en proceso y su
+                problemática
+              </li>
+              <li>Avisos de atención inmediata de mantenimiento predictivo</li>
+              <li>Actividades de mantenimiento con riesgo</li>
+            </ul>
+          </li>
+          <li data-time="3">
+            SEGURIDAD Y AMBIENTAL (3 MIN)
+            <button class="add-note-btn" data-section="seguridad">
+              <i class="fas fa-plus"></i> Agregar nota
+            </button>
+            <div class="notes-container" id="seguridad-notes"></div>
+            <ul>
+              <li>
+                Avisos de atención inmediata relacionados con aspectos de
+                seguridad
+              </li>
+              <li>
+                EVENTOS QUE AFECTEN O PUEDAN AFECTAR LAS CONDICIONES DE
+                SEGURIDAD DE LA CENTRAL
+              </li>
+              <li>
+                EVENTOS QUE AFECTEN O PUEDAN AFECTAR LAS CONDICIONES AMBIENTALES
+                DE LA CENTRAL
+              </li>
+            </ul>
+          </li>
+          <li data-time="2">REVISIÓN DE ACUERDOS ANTERIORES (2 MIN)</li>
+          <li data-time="1">
+            CREACIÓN DE ACUERDOS NUEVOS (1 MIN)
+            <ul>
+              <li>
+                Revisión de asignación de responsables para actividades
+                prioritarias
+              </li>
+            </ul>
+          </li>
+          <li data-time="1">
+            SUPERINTENDENCIA GENERAL (1 MIN)
+            <button class="add-note-btn" data-section="superintendencia">
+              <i class="fas fa-plus"></i> Agregar nota
+            </button>
+            <div class="notes-container" id="superintendencia-notes"></div>
+            <ul>
+              <li>RATIFICACIÓN DE LAS ACTIVIDADES PRIORITARIAS DEL DÍA</li>
+            </ul>
+          </li>
+        </ol>
+      </section>
+    </div>
+    <!-- Modal para agregar notas (si lo necesitas) -->
+    <div id="noteModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Agregar nota para <span id="modalSectionName"></span></h2>
+        <textarea
+          id="noteText"
+          placeholder="Escribe tu nota aquí..."
+          rows="6"
+        ></textarea>
+        <div class="modal-buttons">
+          <button id="saveNote">Guardar</button>
+          <button id="cancelNote">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <!-- Incluir el JavaScript del cronómetro -->
+    <script src="{% static 'js/cronometro.js' %}"></script>
+  </body>
+</html>

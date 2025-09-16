@@ -1,0 +1,11 @@
+{% extends 'operativo/base_operativo.html' %}
+
+{% block content %}
+  <h1>AGENDA DE LA REUNIÓN OPERATIVA DE LA CENTRAL CCC VALLADOLID</h1>
+  
+  {% include 'operativo/partials/info_reunion.html' %}
+  {% include 'operativo/partials/proposito.html' %}
+  {% include 'operativo/partials/importancia.html' %}
+  {% include 'operativo/partials/integrantes.html' %}
+  {% include 'operativo/partials/agenda_detallada.html' %}
+{% endblock %}
