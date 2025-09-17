@@ -1,24 +1,31 @@
 <section class="agenda">
   <h2 class="section-header">AGENDA DETALLADA</h2>
+
+  <!-- Cronómetro -->
   <div class="cronometro-secciones">
     <span id="currentSection">Sección actual: -</span>
     <span id="sectionTimer">00:00</span>
     <button id="nextSection" style="display: none">Siguiente sección</button>
   </div>
+
   <ol id="agendaList">
-    {% include 'operativo/partials/agenda_item.html' with time="6" section="produccion" title="PRODUCCIÓN (6 MIN)" %}
-    {% include 'operativo/partials/agenda_item.html' with time="2" section="mantenimiento" title="MANTENIMIENTO (2 MIN)" %}
-    {% include 'operativo/partials/agenda_item.html' with time="3" section="seguridad" title="SEGURIDAD Y AMBIENTAL (3 MIN)" %}
-    
-    <li data-time="2">REVISIÓN DE ACUERDOS ANTERIORES (2 MIN)</li>
-    
-    <li data-time="1">
-      CREACIÓN DE ACUERDOS NUEVOS (1 MIN)
-      <ul>
-        <li>Revisión de asignación de responsables para actividades prioritarias</li>
-      </ul>
-    </li>
-    
-    {% include 'operativo/partials/agenda_item.html' with time="1" section="superintendencia" title="SUPERINTENDENCIA GENERAL (1 MIN)" %}
+    <!-- Secciones incluidas -->
+    {% include 'operativo/partials/agenda_seccion.html' with time="6" section="produccion" title="PRODUCCIÓN (6 MIN)" %}
+    {% include 'operativo/partials/agenda_seccion.html' with time="2" section="mantenimiento" title="MANTENIMIENTO (2 MIN)" %}
+    {% include 'operativo/partials/agenda_seccion.html' with time="3" section="seguridad" title="SEGURIDAD Y AMBIENTAL (3 MIN)" %}
+
+    <!-- Enlace para revisar acuerdos anteriores -->
+   <li data-time="2">
+  <a href="{% url 'historial_acuerdo' %}" target="_blank">REVISIÓN DE ACUERDOS ANTERIORES (2 MIN)</a>
+</li>
+
+<li data-time="1">
+  <a href="{% url 'crear_acuerdo' %}" target="_blank">CREACIÓN DE ACUERDOS NUEVOS (1 MIN)</a>
+  <ul>
+    <li>Revisión de asignación de responsables para actividades prioritarias</li>
+  </ul>
+</li>
+
+    {% include 'operativo/partials/agenda_seccion.html' with time="1" section="superintendencia" title="SUPERINTENDENCIA GENERAL (1 MIN)" %}
   </ol>
 </section>

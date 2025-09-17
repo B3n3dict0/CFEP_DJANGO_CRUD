@@ -9,5 +9,10 @@ urlpatterns = [
     # Agrega las nuevas rutas para directivo y operativo
     path('directivo/', views.directivo_view, name='directivo'),
     path('operativo/', views.operativo_view, name='operativo'),
+    
+    path("crear-acuerdo/", views.crear_acuerdo, name="crear_acuerdo"),
+    path('guardar-matriz-acuerdos/', views.guardar_matriz_acuerdos, name='guardar_matriz_acuerdos'),
+    path('historial-acuerdo/', views.historial_acuerdo, name='historial_acuerdo'),
+
    
 ]
