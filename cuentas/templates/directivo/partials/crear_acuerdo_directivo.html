@@ -1,0 +1,27 @@
+{% load static %}
+<form method="POST" id="acuerdos-form" onsubmit="event.preventDefault(); guardarTodo();">
+  {% csrf_token %}
+  <table id="acuerdos-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Problematica de area</th>
+        <th>Acuerdo</th>
+        <th>Unidad Parada</th>
+        <th>Fecha Límite</th>
+        <th>Pendiente</th>
+        <th>Responsable</th>
+        <th>% Avance</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="acuerdos-body">
+      <!-- Filas dinámicas -->
+    </tbody>
+  </table>
+  <button type="button" onclick="agregarFila()">Agregar Acuerdo</button>
+  <button type="submit">Guardar Todo</button>
+  <button type="button" onclick="eliminarTodo()">Eliminar Todo</button>
+</form>
+
+<script src="{% static 'js/acuerdos_directiva.js' %}"></script>

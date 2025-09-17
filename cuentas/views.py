@@ -14,28 +14,37 @@ from datetime import datetime
 def menu_view(request):
     return render(request, 'cuentas/menu.html')
 
+# toda la logica en vista directiva
 def directivo_view(request):
-    return render(request, 'rutadir/directivo.html')
+    context = {
+        'fecha_actual': datetime.now()
+    }
+    return render(request, 'directivo/reunion_main.html', context)
 
+def historial_acuerdo_directivo(request):
+    return render(request, "directivo/partials/historial_acuerdo_directivo.html")
+
+def crear_acuerdo_directivo(request):
+    return render(request, 'directivo/partials/crear_acuerdo_directivo.html')
+
+def historial_acuerdo_directivo(request):
+    acuerdos = AcuerdoDetalle.objects.all().order_by('-creado_en')
+    return render(request, 'directivo/partials/historial_acuerdo_operativo.html', {'acuerdos': acuerdos})
+
+# toda la logica en vista operativa
 def operativo_view(request):
     context = {
         'fecha_actual': datetime.now()
     }
     return render(request, 'operativo/reunion_main.html', context)
 
-def historial_acuerdos(request):
-    return render(request, "operativo/partials/historial_acuerdo.html")
+def historial_acuerdo_operativo(request):
+    return render(request, "operativo/partials/historial_acuerdo_operativo.html")
 
-def crear_acuerdo(request):
-    # Template para crear nuevos acuerdos
-    return render(request, 'operativo/partials/crear_acuerdo.html')
+def crear_acuerdo_operativo(request):
+    return render(request, 'operativo/partials/crear_acuerdo_operativo.html')
 
-#Aqui va para el crear formulario de acuerdos operativo
-from django.http import JsonResponse
-from .models import AcuerdoDetalle
-from datetime import datetime
-
-def guardar_matriz_acuerdos(request):
+def guardar_matriz_acuerdos(request): #Aqui va para el crear formulario de acuerdos operativo
     if request.method != "POST":
         return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
@@ -75,11 +84,6 @@ def guardar_matriz_acuerdos(request):
         print("Error al guardar:", e)
         return JsonResponse({'success': False, 'error': str(e)})
 
-
-# Aqui consulto historial de operativo
-def historial_acuerdo(request):
-    # Obtener todos los acuerdos ordenados por fecha de creación descendente
+def historial_acuerdo_operativo(request):
     acuerdos = AcuerdoDetalle.objects.all().order_by('-creado_en')
-    
-    # Pasar los acuerdos al template
-    return render(request, 'operativo/partials/historial_acuerdo.html', {'acuerdos': acuerdos})
+    return render(request, 'operativo/partials/historial_acuerdo_operativo.html', {'acuerdos': acuerdos})
