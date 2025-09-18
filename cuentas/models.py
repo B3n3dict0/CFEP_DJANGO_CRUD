@@ -1,8 +1,9 @@
 from django.db import models
 
-# Create your models here.
-
-class AcuerdoDetalle(models.Model): #la parte operativa
+# -----------------------
+# MODELO OPERATIVA
+# -----------------------
+class AcuerdoOperativa(models.Model):
     numerador = models.IntegerField()
     tipo_unidad = models.CharField(max_length=100)  
     descripcion = models.TextField()
@@ -15,10 +16,17 @@ class AcuerdoDetalle(models.Model): #la parte operativa
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'acuerdos_operativa'  # asegura que sea una tabla separada
+        ordering = ['numerador']
+
     def __str__(self):
         return f"{self.numerador} - {self.descripcion[:20]}"
 
-class AcuerdoDirectivo(models.Model):  # la parte directiva
+# -----------------------
+# MODELO DIRECTIVA
+# -----------------------
+class AcuerdoDirectiva(models.Model):
     numerador = models.IntegerField()
     tipo_unidad = models.CharField(max_length=100)  # texto del área
     descripcion = models.TextField()  # acuerdo escrito
@@ -32,11 +40,21 @@ class AcuerdoDirectivo(models.Model):  # la parte directiva
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'acuerdos_directiva'  # asegura que sea una tabla separada
+        ordering = ['numerador']
+
     def __str__(self):
         return f"{self.numerador} - {self.descripcion[:20]}"
-    
+
+# -----------------------
+# MODELO INTEGRANTES
+# -----------------------
 class Integrante(models.Model):
     rol = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        db_table = 'integrantes'
 
     def __str__(self):
         return self.rol

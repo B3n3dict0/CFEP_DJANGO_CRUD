@@ -1,30 +1,30 @@
-let contador = 1;
+let contadorDirectiva = 1;
 
-function agregarFila() {
-    const tbody = document.getElementById("acuerdos-body");
+function agregarFilaDirectiva() {
+    const tbody = document.getElementById("acuerdos-body-directiva");
     const row = document.createElement("tr");
-    row.setAttribute("data-row", contador);
+    row.setAttribute("data-row", contadorDirectiva);
 
     row.innerHTML = `
-        <td><input type="number" name="numerador_${contador}" value="${contador}" readonly></td>
+        <td><input type="number" name="numerador_${contadorDirectiva}" value="${contadorDirectiva}" readonly></td>
         <td>
-            <select name="tipo_unidad_${contador}" required>
-              <option value="" disabled selected>Selecciona una unidad</option>
-              <option value="Unidad 1">Área de producción </option>
-              <option value="Unidad 2">Área de mantenimiento</option>
-              <option value="Unidad 3">Área de gestión de recursos humanos</option>
-              <option value="Unidad 4">Área de gestión de recursos financieros</option>
-              <option value="Unidad 5">Área de gestión de recursos materiales y servicios</option>
-              <option value="Unidad 6">Área de seguridad</option>
-              <option value="Unidad 7">Área de calidad</option>
+            <select name="tipo_unidad_${contadorDirectiva}" required>
+                <option value="" disabled selected>Selecciona una unidad</option>
+                <option value="Unidad 1">Área de producción</option>
+                <option value="Unidad 2">Área de mantenimiento</option>
+                <option value="Unidad 3">Área de gestión de recursos humanos</option>
+                <option value="Unidad 4">Área de gestión de recursos financieros</option>
+                <option value="Unidad 5">Área de gestión de recursos materiales y servicios</option>
+                <option value="Unidad 6">Área de seguridad</option>
+                <option value="Unidad 7">Área de calidad</option>
             </select>
         </td>
-        <td><textarea name="descripcion_${contador}" required></textarea></td>
-        <td><input type="checkbox" name="unidad_parada_${contador}"></td>
-        <td><input type="date" name="fecha_limite_${contador}" required></td>
-        <td><input type="checkbox" name="pendiente_${contador}" checked></td>
+        <td><textarea name="descripcion_${contadorDirectiva}" required></textarea></td>
+        <td><input type="checkbox" name="unidad_parada_${contadorDirectiva}"></td>
+        <td><input type="date" name="fecha_limite_${contadorDirectiva}" required></td>
+        <td><input type="checkbox" name="pendiente_${contadorDirectiva}" checked></td>
         <td>
-            <select name="responsable_${contador}" class="select-responsable">
+            <select name="responsable_${contadorDirectiva}" class="select-responsable">
                 <option value="SUPERINTENDENTE GENERAL" selected>SUPERINTENDENTE GENERAL</option>
                 <option value="SUPERINTENDENTE DE PRODUCCIÓN">SUPERINTENDENTE DE PRODUCCIÓN</option>
                 <option value="SUPERINTENDENTE DE MANTENIMIENTO">SUPERINTENDENTE DE MANTENIMIENTO</option>
@@ -35,35 +35,35 @@ function agregarFila() {
                 <option value="SUPERVISORES">SUPERVISORES</option>
                 <option value="nuevo">Otro...</option>
             </select>
-            <input type="text" name="responsable_manual_${contador}" placeholder="Nuevo responsable" style="display:none;">
+            <input type="text" name="responsable_manual_${contadorDirectiva}" placeholder="Nuevo responsable" style="display:none;">
         </td>
-        <td><input type="number" name="porcentaje_avance_${contador}" min="0" max="100" required></td>
-        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+        <td><input type="number" name="porcentaje_avance_${contadorDirectiva}" min="0" max="100" required></td>
+        <td><button type="button" onclick="eliminarFilaDirectiva(this)">Eliminar</button></td>
     `;
 
     tbody.appendChild(row);
 
     const select = row.querySelector(".select-responsable");
-    const manual = row.querySelector(`[name='responsable_manual_${contador}']`);
+    const manual = row.querySelector(`[name='responsable_manual_${contadorDirectiva}']`);
     select.addEventListener("change", function () {
         manual.style.display = select.value === "nuevo" ? "inline-block" : "none";
     });
 
-    contador++;
+    contadorDirectiva++;
 }
 
-function eliminarFila(btn) {
+function eliminarFilaDirectiva(btn) {
     btn.closest("tr").remove();
 }
 
-function eliminarTodo() {
-    document.getElementById("acuerdos-body").innerHTML = "";
-    contador = 1;
+function eliminarTodoDirectiva() {
+    document.getElementById("acuerdos-body-directiva").innerHTML = "";
+    contadorDirectiva = 1;
 }
 
-function guardarTodo() {
-    const filas = document.querySelectorAll("#acuerdos-body tr");
-    if(filas.length === 0){
+function guardarTodoDirectiva() {
+    const filas = document.querySelectorAll("#acuerdos-body-directiva tr");
+    if (filas.length === 0){
         alert("No hay acuerdos para guardar.");
         return;
     }
@@ -80,7 +80,7 @@ function guardarTodo() {
         });
     });
 
-    fetch("/guardar-matriz-acuerdos/", {
+    fetch("/guardar-matriz-acuerdos-directiva/", {
         method: "POST",
         headers: {
             "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -90,14 +90,14 @@ function guardarTodo() {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert("Todos los acuerdos guardados correctamente");
-            eliminarTodo();
+            alert("Todos los acuerdos directivos guardados correctamente");
+            eliminarTodoDirectiva();
         } else {
             alert("Error al guardar: " + data.error);
         }
     })
     .catch(err => {
-        console.error("Error al enviar los acuerdos:", err);
+        console.error("Error al enviar los acuerdos directivos:", err);
         alert("Error al guardar acuerdos. Revisa la consola.");
     });
 }

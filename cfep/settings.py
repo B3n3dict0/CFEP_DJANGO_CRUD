@@ -15,6 +15,10 @@ DEBUG = True
 # Para pruebas locales, puedes dejarlo así
 ALLOWED_HOSTS = ['*']   # En producción, pon el dominio o IP de tu servidor
 
+# Orígenes de confianza para CSRF (añade el dominio del túnel)
+CSRF_TRUSTED_ORIGINS = [
+    "https://redeem-chrome-leather-technique.trycloudflare.com",
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -57,7 +61,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cfep.wsgi.application'
 
-
 # Base de datos (SQLite por defecto)
 DATABASES = {
     'default': {
@@ -65,7 +68,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
@@ -75,19 +77,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-
 # Internacionalización
 LANGUAGE_CODE = 'es-mx'
 TIME_ZONE = 'America/Mexico_City'
 USE_I18N = True
 USE_TZ = True
 
-
 # Archivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Para producción
-
 
 # Redirecciones login/logout
 LOGIN_REDIRECT_URL = '/menu/'
@@ -96,7 +95,6 @@ LOGIN_URL = '/login/'
 
 # Expirar sesión al cerrar el navegador
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

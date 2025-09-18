@@ -1,4 +1,4 @@
-<h2>Historial de Acuerdos</h2>
+<h2>Historial de Acuerdos Operativos</h2>
 <table border="1" cellpadding="5" cellspacing="0">
     <thead>
         <tr>
@@ -10,7 +10,6 @@
             <th>Pendiente</th>
             <th>Responsable</th>
             <th>% Avance</th>
-            <th>Creado En</th>
         </tr>
     </thead>
     <tbody>
@@ -25,12 +24,11 @@
                 <td>{{ a.pendiente|yesno:"Sí,No" }}</td>
                 <td>{{ a.responsable }}</td>
                 <td>{{ a.porcentaje_avance }}%</td>
-                <td>{{ a.creado_en|date:"Y-m-d H:i" }}</td>
             </tr>
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="9">No hay acuerdos guardados.</td>
+                <td colspan="8">No hay acuerdos guardados.</td>
             </tr>
         {% endif %}
     </tbody>
