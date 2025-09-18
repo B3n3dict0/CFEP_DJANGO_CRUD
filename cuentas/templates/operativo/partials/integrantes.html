@@ -13,5 +13,15 @@
     </select>
     <button id="addIntegrante">Agregar</button>
   </div>
-  <ul id="listaIntegrantes"></ul>
+  <ul id="listaIntegrantes">
+    {% for integrante in integrantes %}
+      <li>
+        {{ integrante.rol }}
+        <button class="eliminar-btn" data-rol="{{ integrante.rol }}">Eliminar</button>
+      </li>
+    {% endfor %}
+  </ul>
 </section>
+
+{% load static %}
+<script src="{% static 'js/integrantes.js' %}"></script>

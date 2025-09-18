@@ -5,10 +5,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render, redirect
-from .models import AcuerdoDetalle
+from .models import AcuerdoDetalle, AcuerdoDirectivo
 from django.http import JsonResponse
 from .models import AcuerdoDetalle
 from datetime import datetime
+from .models import Integrante
 
 @login_required
 def menu_view(request):
@@ -37,6 +38,10 @@ def operativo_view(request):
         'fecha_actual': datetime.now()
     }
     return render(request, 'operativo/reunion_main.html', context)
+
+def reunion_directiva(request): #aqui se inserta los integrantes
+    integrantes = Integrante.objects.filter(categoria="directiva")
+    return render(request, "directiva/reunion_main.html", {"integrantes": integrantes})
 
 def historial_acuerdo_operativo(request):
     return render(request, "operativo/partials/historial_acuerdo_operativo.html")
@@ -87,3 +92,81 @@ def guardar_matriz_acuerdos(request): #Aqui va para el crear formulario de acuer
 def historial_acuerdo_operativo(request):
     acuerdos = AcuerdoDetalle.objects.all().order_by('-creado_en')
     return render(request, 'operativo/partials/historial_acuerdo_operativo.html', {'acuerdos': acuerdos})
+
+def reunion_main(request): #aqui es para cargar insertar los integrantes
+    integrantes = Integrante.objects.all()
+    return render(request, "operativo/reunion_main.html", {"integrantes": integrantes})
+
+
+def reunion_main(request):
+    integrantes = Integrante.objects.all()
+    return render(request, "operativo/reunion_main.html", {"integrantes": integrantes})
+
+@csrf_exempt
+def agregar_integrante(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        rol = data.get("rol")
+
+        integrante, creado = Integrante.objects.get_or_create(rol=rol)
+        if creado:
+            return JsonResponse({"success": True, "rol": rol})
+        else:
+            return JsonResponse({"success": False, "message": "Ya existe este integrante"})
+
+@csrf_exempt
+def eliminar_integrante(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        rol = data.get("rol")
+
+        try:
+            integrante = Integrante.objects.get(rol=rol)
+            integrante.delete()
+            return JsonResponse({"success": True})
+        except Integrante.DoesNotExist:
+            return JsonResponse({"success": False, "message": "No existe este integrante"})
+        
+        
+
+def guardar_matriz_acuerdos(request):
+    if request.method == "POST":
+        try:
+            acuerdos = []
+            data = request.POST
+
+            # agrupa por contador (ej: numerador_1, descripcion_1, etc.)
+            filas = {}
+            for key, value in data.items():
+                # separar por "_"
+                if "_" in key:
+                    campo, idx = key.rsplit("_", 1)
+                    if idx not in filas:
+                        filas[idx] = {}
+                    filas[idx][campo] = value
+
+            # recorrer filas y guardar en la base de datos
+            for fila in filas.values():
+                acuerdo = AcuerdoDirectivo(
+                    numerador=int(fila.get("numerador", 0)),
+                    tipo_unidad=fila.get("tipo_unidad", ""),
+                    descripcion=fila.get("descripcion", ""),
+                    unidad_parada=True if fila.get("unidad_parada") == "on" else False,
+                    fecha_limite=datetime.strptime(fila.get("fecha_limite", ""), "%Y-%m-%d").date(),
+                    pendiente=True if fila.get("pendiente") == "on" else False,
+                    responsable=fila.get("responsable", ""),
+                    responsable_manual=fila.get("responsable_manual", "").strip() or None,
+                    porcentaje_avance=int(fila.get("porcentaje_avance", 0)),
+                )
+                acuerdo.save()
+                acuerdos.append(acuerdo.id)
+
+            return JsonResponse({"success": True, "ids": acuerdos})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Método no permitido"})
+
+def historial_acuerdo_directivo(request):
+    acuerdos = AcuerdoDirectivo.objects.all().order_by("-creado_en")
+    return render(request, "directivo/partials/historial_acuerdo_directivo.html", {"acuerdos": acuerdos})
